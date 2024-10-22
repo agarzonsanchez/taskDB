@@ -1,10 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchData } from "../redux/dataSlice";
+import { fetchData, postData } from "../redux/dataSlice";
+import TaskCard from "./task-cards/task-cards";
 
 export default function MainPage() {
   const dispatch = useDispatch();
   const { items, status, error } = useSelector((state) => state.data);
+  const [task, setTask] = useState("");
+  console.log("item", items);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (task.trim()) {
+      // Dispatch the addTask action with the form data
+      dispatch(postData({ name: task }));
+      setTask(""); // Clear the form after submission
+      //   window.location.reload();
+    }
+  };
+
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchData()); // Dispatch the fetchData thunk
@@ -14,18 +27,32 @@ export default function MainPage() {
   if (status === "loading") {
     return <div>loading</div>;
   }
-  if (status === "loading") {
+  if (status === "failed") {
     return <div>error:{error}</div>;
   }
-  console.log(items);
+
   return (
     <>
       <div>
         <h1>TASK MANAGER</h1>
-        <input type="text" name="task" />
-        <button>Submit</button>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="task"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <button type="submit">Submit</button>
+        </form>
       </div>
-      <div>TASK</div>
+
+      <div>
+        {items.tasks && items.tasks.length > 0
+          ? items.tasks.map((item) => (
+              <TaskCard key={item._id} item={item.name} id={item._id} />
+            ))
+          : null}
+      </div>
     </>
   );
 }
