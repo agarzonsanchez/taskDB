@@ -1,13 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDataById } from "../../redux/dataSlice";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { updateTask } from "../../redux/dataSlice";
 export default function Details() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { selectedTask, status, error } = useSelector((state) => state.data);
-
+  const [task, setTask] = useState("");
   useEffect(() => {
     dispatch(getDataById(id));
   }, [dispatch, id]);
@@ -24,13 +25,34 @@ export default function Details() {
     <div>
       <div>
         {selectedTask && selectedTask.task ? (
-          <p>{selectedTask.task.name}</p>
+          <h1>{selectedTask.task.name}</h1>
         ) : null}
       </div>
       <div>
-        <Link to="/">
-          <button>Go Back</button>
-        </Link>
+        <form onSubmit="">
+          <p>Task: </p>
+          <input
+            type="text"
+            name="task"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <p>Complete: </p>
+          <input
+            type="checkbox"
+            id="vehicle1"
+            name="vehicle1"
+            value="Bike"
+          ></input>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+        <div>
+          <Link to="/">
+            <button>Go Back</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

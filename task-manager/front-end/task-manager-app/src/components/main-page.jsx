@@ -48,7 +48,11 @@ export default function MainPage() {
       {items.tasks && items.tasks.length > 0
         ? items.tasks.map((item) => (
             <div key={item._id}>
-              <TaskCard item={item.name} id={item._id} />
+              <TaskCard
+                item={item.name}
+                id={item._id}
+                completed={item.completed}
+              />
             </div>
           ))
         : null}
