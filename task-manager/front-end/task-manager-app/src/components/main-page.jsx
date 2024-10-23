@@ -7,7 +7,6 @@ export default function MainPage() {
   const dispatch = useDispatch();
   const { items, status, error } = useSelector((state) => state.data);
   const [task, setTask] = useState("");
-  console.log("item", items);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (task.trim()) {
@@ -46,13 +45,13 @@ export default function MainPage() {
         </form>
       </div>
 
-      <div>
-        {items.tasks && items.tasks.length > 0
-          ? items.tasks.map((item) => (
-              <TaskCard key={item._id} item={item.name} id={item._id} />
-            ))
-          : null}
-      </div>
+      {items.tasks && items.tasks.length > 0
+        ? items.tasks.map((item) => (
+            <div key={item._id}>
+              <TaskCard item={item.name} id={item._id} />
+            </div>
+          ))
+        : null}
     </>
   );
 }

@@ -102,6 +102,7 @@ const dataSlice = createSlice({
       .addCase(postData.fulfilled, (state, action) => {
         console.log("New task added:", action.payload);
         state.status = "succeeded";
+        console.log(state.items.tasks);
         state.items.tasks.push(action.payload.task); // Add the new task to the state
       })
       .addCase(postData.rejected, (state, action) => {
@@ -113,7 +114,10 @@ const dataSlice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.items = state.items.filter((task) => task.id !== action.payload); // Remove task by ID
+        state.items.tasks = state.items.tasks.filter(
+          (task) => task._id !== action.payload
+        ); // Remove task by ID
+        console.log(state.items.tasks);
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.status = "failed";
