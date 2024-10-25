@@ -27,7 +27,7 @@ export const getDataById = createAsyncThunk(
 export const postData = createAsyncThunk("data/postData", async (newTask) => {
   try {
     const response = await axios.post(
-      "http://localhost:3001/api/v1/tasks",
+      `http://localhost:3001/api/v1/tasks/`,
       newTask
     );
     return response.data;
@@ -50,12 +50,13 @@ export const deleteTask = createAsyncThunk(
 
 export const updateTask = createAsyncThunk(
   "data/updateTask",
-  async ({ taskId, updatedTask }) => {
+  async (updatedTask) => {
     try {
-      const response = await axios.put(
-        `http://localhost:3001/api/v1/tasks/${taskId}`,
+      const response = await axios.patch(
+        `http://localhost:3001/api/v1/tasks/${updatedTask._id}`,
         updatedTask
       );
+
       return response.data; // Return the updated task
     } catch (error) {
       throw error;
@@ -78,6 +79,8 @@ const dataSlice = createSlice({
         state.status = "loading"; // Set loading state
       })
       .addCase(fetchData.fulfilled, (state, action) => {
+        console.log("entre");
+
         state.status = "succeeded";
         state.items = action.payload; // Store the fetched data in state
       })
@@ -100,9 +103,8 @@ const dataSlice = createSlice({
         state.status = "loading";
       })
       .addCase(postData.fulfilled, (state, action) => {
-        console.log("New task added:", action.payload);
         state.status = "succeeded";
-        console.log(state.items.tasks);
+
         state.items.tasks.push(action.payload.task); // Add the new task to the state
       })
       .addCase(postData.rejected, (state, action) => {
@@ -117,7 +119,6 @@ const dataSlice = createSlice({
         state.items.tasks = state.items.tasks.filter(
           (task) => task._id !== action.payload
         ); // Remove task by ID
-        console.log(state.items.tasks);
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.status = "failed";
@@ -128,11 +129,18 @@ const dataSlice = createSlice({
       })
       .addCase(updateTask.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const index = state.items.findIndex(
-          (task) => task.id === action.payload.id
+        const jsonString = JSON.stringify(state.items);
+        const itemsArray = JSON.parse(jsonString); // Convert back to an array
+        console.log(action.payload.task._id);
+
+        const index = itemsArray.tasks.findIndex(
+          (task) => task._id === action.payload.task._id
         );
+        console.log(index);
         if (index !== -1) {
-          state.items[index] = action.payload; // Update the task in the state
+          state.items = itemsArray;
+          console.log(state.items.tasks);
+          state.items.tasks[index] = action.payload.task; // Update the task in the state
         }
       })
       .addCase(updateTask.rejected, (state, action) => {

@@ -1,0 +1,28 @@
+.taskmanager-title {
+  margin: 40px;
+}
+
+.form-input {
+  margin: 10px;
+}
+
+.form-input input {
+  border-radius: 10px 0 0 10px;
+  padding: 10px;
+}
+
+.form-input button {
+  border-radius: 0 10px 10px 0;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bolder;
+}
+button:hover {
+  background-color: #fff;
+  cursor: pointer;
+  border: 1px solid grey;
+}
+.task-item {
+  display: flex;
+  justify-content: center;
+}

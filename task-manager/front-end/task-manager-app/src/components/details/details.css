@@ -1,0 +1,14 @@
+.task-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.task-item {
+  margin-right: 15px;
+}
+
+button {
+  padding: 5px;
+  font-weight: bolder;
+  border-radius: 5px;
+}

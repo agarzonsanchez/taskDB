@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchData, postData } from "../redux/dataSlice";
 import TaskCard from "./task-cards/task-cards";
+import "../components/main-page.css";
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -32,9 +33,9 @@ export default function MainPage() {
 
   return (
     <>
-      <div>
+      <div className="taskmanager-title">
         <h1>TASK MANAGER</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form-input">
           <input
             type="text"
             name="task"

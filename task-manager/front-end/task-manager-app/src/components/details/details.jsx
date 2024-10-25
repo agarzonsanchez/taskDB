@@ -3,14 +3,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDataById } from "../../redux/dataSlice";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { updateTask } from "../../redux/dataSlice";
+import { updateTask, fetchData } from "../../redux/dataSlice";
+import "./details.css";
+
 export default function Details() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { selectedTask, status, error } = useSelector((state) => state.data);
   const [task, setTask] = useState("");
-  useEffect(() => {
+  const [completed, setCompleted] = useState();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      _id: id,
+      name: task || selectedTask.task.name,
+      completed: completed || false,
+    };
+    console.log(data);
+    dispatch(updateTask(data));
+    setTask("");
+    setCompleted(false);
+    dispatch(fetchData());
     dispatch(getDataById(id));
+  };
+  useEffect(() => {
+    // Dispatch the fetchData thunk
+    dispatch(getDataById(id));
+    if (selectedTask && selectedTask.task) {
+      setCompleted(selectedTask.task.completed);
+    }
   }, [dispatch, id]);
 
   if (status === "loading") {
@@ -25,25 +48,33 @@ export default function Details() {
     <div>
       <div>
         {selectedTask && selectedTask.task ? (
-          <h1>{selectedTask.task.name}</h1>
-        ) : null}
+          <h1>{selectedTask.task.name.toUpperCase()}</h1>
+        ) : (
+          <p>No task found</p>
+        )}
       </div>
       <div>
-        <form onSubmit="">
-          <p>Task: </p>
-          <input
-            type="text"
-            name="task"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-          />
-          <p>Complete: </p>
-          <input
-            type="checkbox"
-            id="vehicle1"
-            name="vehicle1"
-            value="Bike"
-          ></input>
+        <form onSubmit={handleSubmit}>
+          <div className="task-form">
+            <p className="task-item">Task: </p>
+            <input
+              type="text"
+              name="task"
+              value={task || ""}
+              onChange={(e) => setTask(e.target.value)}
+            />
+          </div>
+          <div className="task-form">
+            <p className="task-item">Complete: </p>
+            <input
+              type="checkbox"
+              id="completed"
+              name="completed check"
+              value={completed}
+              checked={completed}
+              onChange={(e) => setCompleted(!completed)}
+            ></input>
+          </div>
           <div>
             <button type="submit">Submit</button>
           </div>
