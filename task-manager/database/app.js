@@ -10,6 +10,8 @@ const cors = require("cors");
 const app = express();
 const tasks = require("../database/routes/task");
 const connectDB = require("./db/connect");
+const notFound = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 const port = 3001;
 
 require("dotenv").config();
@@ -28,6 +30,8 @@ app.get("/hello", (req, res) => {
 });
 
 app.use("/api/v1/tasks", tasks);
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 const start = async () => {
   try {
