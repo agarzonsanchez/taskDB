@@ -12,3 +12,7 @@ button {
   font-weight: bolder;
   border-radius: 5px;
 }
+
+button:hover {
+  font-weight: bolder;
+}

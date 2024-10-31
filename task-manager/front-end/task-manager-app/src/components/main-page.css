@@ -19,8 +19,9 @@
 }
 button:hover {
   background-color: #fff;
-  cursor: pointer;
   border: 1px solid grey;
+  cursor: pointer;
+  font-weight: bolder;
 }
 .task-item {
   display: flex;
