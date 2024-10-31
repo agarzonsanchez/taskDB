@@ -79,8 +79,6 @@ const dataSlice = createSlice({
         state.status = "loading"; // Set loading state
       })
       .addCase(fetchData.fulfilled, (state, action) => {
-        console.log("entre");
-
         state.status = "succeeded";
         state.items = action.payload; // Store the fetched data in state
       })
@@ -131,15 +129,14 @@ const dataSlice = createSlice({
         state.status = "succeeded";
         const jsonString = JSON.stringify(state.items);
         const itemsArray = JSON.parse(jsonString); // Convert back to an array
-        console.log(action.payload.task._id);
 
         const index = itemsArray.tasks.findIndex(
           (task) => task._id === action.payload.task._id
         );
-        console.log(index);
+
         if (index !== -1) {
           state.items = itemsArray;
-          console.log(state.items.tasks);
+
           state.items.tasks[index] = action.payload.task; // Update the task in the state
         }
       })
