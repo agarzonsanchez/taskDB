@@ -12,7 +12,7 @@ const tasks = require("../database/routes/task");
 const connectDB = require("./db/connect");
 const notFound = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 require("dotenv").config();
 //middleware
